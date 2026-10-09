@@ -30,8 +30,19 @@ const search = document.getElementById('search');
     filterCards();
   }));
   search.addEventListener('input', filterCards);
+  function formatMessageForCopy(message) {
+    return message
+      .replace(/\r\n?/g, '\n')
+      .split('\n')
+      .map(line => line.trim())
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
   document.querySelectorAll('.copy').forEach(button => button.addEventListener('click', async () => {
-    const message = button.closest('.card').querySelector('.message').innerText;
+    const card = button.closest('.card');
+    const rawMessage = card.querySelector('.message').innerText;
+    const message = formatMessageForCopy(rawMessage);
     const original = button.innerText;
     try {
       if (navigator.clipboard && window.isSecureContext) {
